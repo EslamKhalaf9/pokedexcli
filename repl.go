@@ -28,6 +28,7 @@ func getCommands() map[string]cliCommand {
 		"map": {
 			name:        "map",
 			description: "get 20 locations",
+			callback:    callbackMap,
 		},
 	}
 }
@@ -49,7 +50,7 @@ func startRepl() {
 
 		if !ok {
 			fmt.Println("command not exist")
-			os.Exit(0)
+			continue
 		}
 
 		command.callback()
