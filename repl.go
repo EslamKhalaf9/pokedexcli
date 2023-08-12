@@ -10,7 +10,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func()
+	callback    func() error
 }
 
 func getCommands() map[string]cliCommand {
@@ -26,40 +26,38 @@ func getCommands() map[string]cliCommand {
 			callback:    callbackExit,
 		},
 		"map": {
-			name: "map",
-		},
-		"hello": {
-			name:        "hello",
-			description: "hello",
-			callback: func() {
-				fmt.Println("hello how are you")
-			},
+			name:        "map",
+			description: "get 20 locations",
 		},
 	}
 }
 
 func startRepl() {
 	scanner := bufio.NewScanner((os.Stdin))
+	availableCommands := getCommands()
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
 
 		input := scanner.Text()
 		cleaned := cleanInput(input)
-		command := cleaned[0]
-		val, ok := getCommands()[command]
+		if len(cleaned) == 0 {
+			continue
+		}
+		commandName := cleaned[0]
+		command, ok := availableCommands[commandName]
 
 		if !ok {
 			fmt.Println("command not exist")
 			os.Exit(0)
 		}
 
-		val.callback()
+		command.callback()
 	}
 }
 
 func cleanInput(input string) []string {
 	lowerCase := strings.ToLower(input)
-	inputs := strings.Split(lowerCase, " ")
+	inputs := strings.Fields(lowerCase)
 	return inputs
 }
