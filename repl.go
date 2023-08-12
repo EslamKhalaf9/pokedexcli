@@ -28,12 +28,19 @@ func getCommands() map[string]cliCommand {
 		"map": {
 			name: "map",
 		},
+		"hello": {
+			name:        "hello",
+			description: "hello",
+			callback: func() {
+				fmt.Println("hello how are you")
+			},
+		},
 	}
 }
 
 func startRepl() {
+	scanner := bufio.NewScanner((os.Stdin))
 	for {
-		scanner := bufio.NewScanner((os.Stdin))
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
 
@@ -44,6 +51,7 @@ func startRepl() {
 
 		if !ok {
 			fmt.Println("command not exist")
+			os.Exit(0)
 		}
 
 		val.callback()
