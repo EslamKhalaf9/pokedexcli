@@ -11,9 +11,12 @@ import (
 // make get request to /location-area
 // handles all possible errors
 // return locationAreasRes, error
-func (c *Client) ListLocationAreas() (LocationAreasRes, error) {
+func (c *Client) ListLocationAreas(pageUrl *string) (LocationAreasRes, error) {
 	endpoint := "/location-area"
 	fullURL := baseURL + endpoint
+	if pageUrl != nil {
+		fullURL = *pageUrl
+	}
 
 	req, err := http.NewRequest("GET", fullURL, nil)
 	if err != nil {
